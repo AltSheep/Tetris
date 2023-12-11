@@ -21,6 +21,7 @@ class Camera
 
 
         vec3 GetCameraUpVec();
+        vec3 GetCameraRightVec();
         mat4 GetCameraView();
         mat4 GetCameraProjection();
 

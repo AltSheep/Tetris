@@ -10,7 +10,7 @@ Camera::Camera(vec3 cameraPosition, vec3 cameraDirection, float fov, GLFWwindow*
     FOV = fov;
     Window = window;
 
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
 vec3 Camera::GetCameraUpVec()
@@ -20,6 +20,11 @@ vec3 Camera::GetCameraUpVec()
 
     // get the up vector by cross product camera look direction with right vector
     return glm::cross(cameraRightVec, CameraDirection);
+}
+
+vec3 Camera::GetCameraRightVec()
+{
+    return glm::cross(CameraDirection, Helper::WORLD_UP_VECTOR);
 }
 
 mat4 Camera::GetCameraView()
@@ -46,14 +51,19 @@ void Camera::MouseInput()
     // mouseY *= sensitivity;
 
     float yawMovement = (lastMousePos.x - mouseX) * sensitivity;
+    float pitchMovement = (lastMousePos.y - mouseY) * sensitivity;
 
     lastMousePos.x = mouseX;
+    lastMousePos.y = mouseY;
 
 
 
     printf("%f\n", yawMovement);
 
     glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(yawMovement), glm::vec3(0.0f, 1.0f, 0.0f));
+    CameraDirection = rotationMatrix * glm::vec4(CameraDirection, 0.0f);
+
+    rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(pitchMovement), GetCameraRightVec());
     CameraDirection = rotationMatrix * glm::vec4(CameraDirection, 0.0f);
 
 

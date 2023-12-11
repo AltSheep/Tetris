@@ -25,7 +25,12 @@ private:
     GLFWwindow* Window;
     Camera* CameraView;
 
+
+
 public:
+
+    vec3 Position;
+    vec3 Direction;
 
     const char* vertexShaderSource =
         "#version 330 core\n"

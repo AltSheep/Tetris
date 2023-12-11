@@ -7,6 +7,7 @@ Mesh::Mesh(GLFWwindow* window, Camera* camera)
 {
     Window = window;
     CameraView = camera;
+    Direction = vec3(1, 0, 0);
 
     // compile our mesh shaders
     VertexShader = glCreateShader(GL_VERTEX_SHADER);
@@ -89,22 +90,29 @@ Mesh::Mesh(GLFWwindow* window, Camera* camera)
 
 void Mesh::Render()
 {
+    // rotate the mesh
+    float rotateAmmount = glm::radians(glfwGetTime());
+    //glm::mat4 rotationMatrix = glm::rotate(mat4(1.0f), rotateAmmount, vec3(0.0f, 1.0f, 0.0f));
+    glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(rotateAmmount), vec3(0.0f, 1.0f, 0.0f));
+    Direction = rotationMatrix * vec4(Direction, 0.0f);
+    //Helper::printVector(Direction);
+
+
+    // create model to apply the meshes postion and rotation
     glm::mat4 model = glm::mat4(1.0f);
 
-    //model = glm::translate(model, glm::vec3(sin(glfwGetTime()), cos(glfwGetTime()), 0));
+    model = glm::lookAt(Position, Position + Direction, Helper::WORLD_UP_VECTOR);
+    model = glm::translate(glm::mat4(1.0f), Position) * model;
     
-
-    Helper::printVector(CameraView->CameraPosition);
-    Helper::printVector(CameraView->CameraDirection);
+    //Helper::printVector(CameraView->CameraPosition);
+    //Helper::printMatrix(model);
 
     glUseProgram(ShaderProgram);
     glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, "model"), 1, GL_FALSE, glm::value_ptr(model));
     glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, "view"), 1, GL_FALSE, glm::value_ptr(CameraView->GetCameraView()));
     glUniformMatrix4fv(glGetUniformLocation(ShaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(CameraView->GetCameraProjection()));
 
-    glClearColor(0.5f, 0.0f, 0.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+    // bind the mesh we want to draw then draw it
     glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, 24);
 }
