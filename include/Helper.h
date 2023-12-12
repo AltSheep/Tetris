@@ -27,6 +27,11 @@ class Helper
         {
             printf("<%.2f, %.2f, %.2f>\n", vec3[0], vec3[1], vec3[2]);
         }
+
+        static void printVector(vec4 vec4) 
+        {
+            printf("<%.2f, %.2f, %.2f, %.2f>\n", vec4[0], vec4[1], vec4[2], vec4[2]);
+        }
 };
 
 

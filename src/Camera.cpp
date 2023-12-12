@@ -10,7 +10,8 @@ Camera::Camera(vec3 cameraPosition, vec3 cameraDirection, float fov, GLFWwindow*
     FOV = fov;
     Window = window;
 
-    //glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    // make the cursor disappera
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
 vec3 Camera::GetCameraUpVec()
@@ -58,10 +59,17 @@ void Camera::MouseInput()
 
 
 
-    printf("%f\n", yawMovement);
+    //printf("%f\n", yawMovement);
 
     glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(yawMovement), glm::vec3(0.0f, 1.0f, 0.0f));
+
+    //Helper::printMatrix(rotationMatrix);
+    //Helper::printVector(CameraDirection);
+
     CameraDirection = rotationMatrix * glm::vec4(CameraDirection, 0.0f);
+
+
+
 
     rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(pitchMovement), GetCameraRightVec());
     CameraDirection = rotationMatrix * glm::vec4(CameraDirection, 0.0f);

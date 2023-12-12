@@ -20,11 +20,11 @@ int main()
         return -1;
     }
 
+    // create the window
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-
     GLFWwindow* window = glfwCreateWindow(800, 600, "Moving Triangle", nullptr, nullptr);
     if (!window)
     {
@@ -44,17 +44,15 @@ int main()
     }
 
 
-    
-
-    Camera* camera = new Camera(vec3(0, 0, 3), vec3(0, 0, -1), 45.0f, window);
+    Camera* camera = new Camera(vec3(0, 0, -3), vec3(0, 0, 1), 45.0f, window);
 
     // create a triangle mesh
-    Mesh* mesh = new Mesh(window, camera);
+    //Mesh* mesh = new Mesh(window, camera);
 
     Mesh* mesh1 = new Mesh(window, camera);
-    mesh1->Position = vec3(5, 0, 0);
+    mesh1->Position = vec3(0, 0, 0);
 
-    Text* text = new Text("H", window);
+    //Text* text = new Text("H", window);
 
     float frameTime = 0;
     float prevTime = 0;
@@ -62,9 +60,12 @@ int main()
     {
         // Get the time
         frameTime = glfwGetTime() - prevTime;
+
+        //printf("Current Time:%f  - Previous Frame Time:%f = FrameTime: %f  FPS:%f \n", glfwGetTime(), prevTime, frameTime, 1/frameTime);
+
         prevTime = glfwGetTime();
 
-        printf("%f\n", 1/frameTime);
+        
 
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
             glfwSetWindowShouldClose(window, true);
@@ -88,6 +89,8 @@ int main()
             camera->CameraPosition += camera->CameraDirection * 5.0f * frameTime;
         }
 
+        //Helper::printVector(camera->CameraPosition);
+
         camera->MouseInput();
 
         glClearColor(0.5f, 0.0f, 0.0f, 1.0f);
@@ -95,9 +98,9 @@ int main()
 
         mesh1->Render();
 
-        mesh->Render();
+        //mesh->Render();
 
-        text->Render();
+        //text->Render();
 
         glfwSwapBuffers(window);
         glfwPollEvents();
